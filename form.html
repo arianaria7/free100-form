@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+<meta charset="UTF-8">
+<title>ثبت‌نام هدیه</title>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background: #5f0bb0;
+        font-family: sans-serif;
+        direction: rtl;
+        text-align: center;
+        color: white;
+    }
+
+    .title {
+        margin-top: 40px;
+        font-size: 65px;
+        font-weight: bold;
+    }
+
+    .subtitle {
+        font-size: 40px;
+        margin-top: -15px;
+        color: #ffcc00;
+        font-weight: bold;
+    }
+
+    .form-box {
+        background: white;
+        color: black;
+        width: 80%;
+        max-width: 450px;
+        margin: 40px auto;
+        padding: 25px;
+        border-radius: 20px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    }
+
+    input {
+        width: 90%;
+        padding: 14px;
+        border-radius: 10px;
+        border: none;
+        background: #f2f2f2;
+        margin-top: 12px;
+        font-size: 16px;
+    }
+
+    .submit-btn {
+        width: 95%;
+        background: #10c148;
+        color: white;
+        border: none;
+        padding: 16px;
+        font-size: 20px;
+        border-radius: 12px;
+        margin-top: 20px;
+        cursor: pointer;
+    }
+
+    .success {
+        display: none;
+        margin-top: 20px;
+        font-size: 20px;
+        color: #00ff99;
+        font-weight: bold;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="title">FREE $100 🎁</div>
+<h2>فرم ثبت‌نام</h2>
+
+<div class="form-box">
+    <h3>فرم ثبت‌نام</h3>
+
+    <form id="giftForm">
+        <input type="text" id="name" placeholder="نام و نام خانوادگی" required>
+        <input type="text" id="city" placeholder="شهر" required>
+        <input type="text" id="phone" placeholder="شماره موبایل" required>
+        <button class="submit-btn" type="submit">ثبت</button>
+    </form>
+
+    <div class="success">🎉 ثبت نام با موفقیت انجام شد</div>
+</div>
+
+<script>
+document.getElementById("giftForm").addEventListener("submit", function(e){
+    e.preventDefault();
+
+    let name = document.getElementById("name").value;
+    let city = document.getElementById("city").value;
+    let phone = document.getElementById("phone").value;
+
+    let BOT_TOKEN = "YOUR_BOT_TOKEN";   // ← توکن ربات
+    let CHAT_ID = "YOUR_CHAT_ID";       // ← چت آیدی عددی
+
+    let text =
+        "📩 فرم جدید ثبت شد:\n\n" +
+        "👤 نام: " + name + "\n" +
+        "🏙️ شهر: " + city + "\n" +
+        "📞 موبایل: " + phone;
+
+    fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            chat_id: CHAT_ID,
+            text: text
+        })
+    });
+
+    document.querySelector(".success").style.display = "block";
+});
+</script>
+
+</body>
+</html>
